@@ -3,69 +3,75 @@ from tkinter.messagebox import *
 import mysql.connector
 from mysql.connector import Error
 import app
+import mainpage
+import rankingpage
+import registerpage
 
 
-def register_window():
-    root.destroy()
-    import registerpage
+class LoginGUI:
+    def __init__(self, refreshMain):
+        self.refreshMain = refreshMain
+        self.root = Tk()
+        self.root.geometry("{}x{}".format(app.WIDTH, app.HEIGHT))
+        self.root.resizable(False, False)
+        self.root.title('Login Page')
 
+        self.frame = Frame(self.root, width=560, height=320, bg='white')
+        self.frame.place(x=180, y=140)
 
-def main_window():
-    root.destroy()
-    import mainpage
+        self.login_label = Label(self.frame, text="Login", font=(app.FONT, 22, 'bold'), bg='white')
+        self.login_label.place(x=220, y=30)
+        self.login_entry = Entry(self.frame, font=(app.FONT, 22), bg='white')
+        self.login_entry.place(x=220, y=70)
 
+        self.password_label = Label(self.frame, text="Password", font=(app.FONT, 22, 'bold'), bg='white')
+        self.password_label.place(x=220, y=120)
+        self.password_entry = Entry(self.frame, font=(app.FONT, 22), bg='white', show='*')
+        self.password_entry.place(x=220, y=160)
 
-def sign_in():
-    if login_entry.get() == '' or password_entry.get() == '':
-        showerror('Error', 'All Fields Are Required')
-    else:
-        try:
-            connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
-                                                 database='quizapp')
-            if connection.is_connected():
-                cursor = connection.cursor()
-                query = 'select idU, userlogin, pswd, score from users where userlogin=%s and pswd=MD5(%s)'
-                cursor.execute(query, (login_entry.get(), password_entry.get()))
-                if cursor.fetchone() is None:
-                    showerror('Error', 'Invalid Login or Password')
-                else:
-                    app.userLogged(cursor[0], cursor[1], cursor[3])
-                    main_window()
+        self.registration_button = Button(self.frame, text='Register New Account?', font=(app.FONT, 12), bd=0,
+                                          bg='white',
+                                          activebackground='white', fg='red', command=self.register_window)
+        self.registration_button.place(x=220, y=200)
 
-        except Error as e:
+        self.login_button = Button(self.frame, text='Login', font=(app.FONT, 18, 'bold'), bd=0, bg='gray20', fg='white',
+                                   command=self.log_in)
+        self.login_button.place(x=450, y=240)
 
-            print("Error while connecting to MySQL", e)
+        self.root.mainloop()
 
-        finally:
-            if connection.is_connected():
-                cursor.close()
-                connection.close()
+    def register_window(self):
+        self.root.destroy()
+        registerpage.RegisterGUI()
 
+    def close_window(self):
+        self.root.destroy()
+        self.refreshMain()
 
-# GUI
-root = Tk()
-root.geometry("{}x{}+{}+{}".format(app.WIDTH, app.HEIGHT, app.POSITION_W, app.POSITION_H))
-root.resizable(False, False)
-root.title('Login Page')
+    def log_in(self):
+        if self.login_entry.get() == '' or self.password_entry.get() == '':
+            showerror('Error', 'All Fields Are Required')
+        else:
+            try:
+                connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
+                                                     database='quizapp')
+                if connection.is_connected():
+                    cursor = connection.cursor()
+                    query = 'select idU, userlogin, pswd, bestScore from users where userlogin=%s and pswd=MD5(%s)'
+                    cursor.execute(query, (self.login_entry.get(), self.password_entry.get()))
+                    data = cursor.fetchall()
+                    if not data:
+                        showerror('Error', 'Invalid Login or Password')
+                    else:
+                        for row in data:
+                            app.user_logged(row[0], row[1], row[3])
+                            self.close_window()
 
-frame = Frame(root, width=560, height=320, bg='white')
-frame.place(x=180, y=140)
+            except Error as e:
 
-login_label = Label(frame, text="Login", font=(app.FONT, 22, 'bold'), bg='white')
-login_label.place(x=220, y=30)
-login_entry = Entry(frame, font=(app.FONT, 22), bg='white')
-login_entry.place(x=220, y=70)
+                print("Error while connecting to MySQL", e)
 
-password_label = Label(frame, text="Password", font=(app.FONT, 22, 'bold'), bg='white')
-password_label.place(x=220, y=120)
-password_entry = Entry(frame, font=(app.FONT, 22), bg='white', show='*')
-password_entry.place(x=220, y=160)
-
-registration_button = Button(frame, text='Register New Account?', font=(app.FONT, 12), bd=0, bg='white',
-                             activebackground='white', fg='red', command=register_window)
-registration_button.place(x=220, y=200)
-
-login_button = Button(frame, text='Login', font=(app.FONT, 18, 'bold'), bd=0, bg='gray20', fg='white', command=sign_in)
-login_button.place(x=450, y=240)
-
-root.mainloop()
+            finally:
+                if connection.is_connected():
+                    cursor.close()
+                    connection.close()

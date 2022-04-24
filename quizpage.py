@@ -1,72 +1,76 @@
 import time
 from tkinter import *
 from tkinter.messagebox import *
+
+import mainpage
 import quiz
 import app
 
 
-def create_quiz_template():
-    question_text = Label(frame, text="", wraplength=750, font=(app.FONT, 25, 'bold'),
-                          fg='black')
-    question_text.place(x=100, y=70)
+class QuizGUI:
+    def __init__(self):
+        self.quiz = quiz.Quiz()
+        self.root = Tk()
+        self.root.geometry("{}x{}+{}+{}".format(app.WIDTH, app.HEIGHT, app.POSITION_W, app.POSITION_H))
+        self.root.resizable(False, False)
+        self.root.title('Quiz App')
 
-    y_position = 200
-    choices = []
-    for _ in range(4):
-        radio_button = Radiobutton(frame, text="", variable=user_answer, value="",
-                                   font=(app.FONT, 14))
-        radio_button.place(x=200, y=y_position)
-        choices.append(radio_button)
-        y_position += 40
+        self.question_text = None
+        self.is_correct_label = None
 
-    return question_text, choices
+        self.frame = Frame(self.root, width=890, height=550, bg='white')
+        self.frame.place(x=5, y=50)
 
+        self.user_answer = StringVar()
 
-def display_question(question):
-    print(question.correct_answer)
-    # question text
-    question_text_label['text'] = question.text_of_question
+        self.question_text_label, self.choices_buttons = self.create_quiz_template()
 
-    for i, choice in enumerate(question.choices, start=0):
-        choices_buttons[i]['text'] = choice
-        choices_buttons[i]['value'] = choice
+        self.check_answer_button = Button(self.frame, text='Check', command=self.check_answer, bg="red", fg="white",
+                                          font=(app.FONT, 18, " bold"))
+        self.check_answer_button.place(x=700, y=450)
 
+        self.display_question(self.quiz.get_question())
 
-def check_answer():
-    is_correct_label = Label(frame, text='', fg='red', bg='white', font=(app.FONT, 15, " bold"))
-    is_correct_label.place(x=445, y=390)
+        self.root.mainloop()
 
-    if quiz.check_answer(user_answer.get()):
-        is_correct_label['fg'] = 'green'
-        is_correct_label['text'] = 'Correct answer'
-        root.after(1000, is_correct_label.destroy)
-        display_question(quiz.get_question())
-    else:
-        is_correct_label['fg'] = 'red'
-        is_correct_label['text'] = f'Incorrect answer!\n Right one: {quiz.current_question.correct_answer}'
-        showinfo("Result", f"Your result: {quiz.score}\nBest result: {app.USER.best_score}")
-        root.destroy()
+    def create_quiz_template(self):
+        self.question_text = Label(self.frame, text="", wraplength=750, font=(app.FONT, 25, 'bold'),
+                                   fg='black')
+        self.question_text.place(x=100, y=70)
 
+        y_position = 200
+        choices = []
+        for _ in range(4):
+            radio_button = Radiobutton(self.frame, text="", variable=self.user_answer, value="",
+                                       font=(app.FONT, 14))
+            radio_button.place(x=200, y=y_position)
+            choices.append(radio_button)
+            y_position += 40
 
-# GUI
-quiz = quiz.Quiz()
-root = Tk()
-root.geometry("{}x{}+{}+{}".format(app.WIDTH, app.HEIGHT, app.POSITION_W, app.POSITION_H))
-root.resizable(False, False)
-root.title('Quiz App')
+        return self.question_text, choices
 
-frame = Frame(root, width=890, height=550, bg='white')
-frame.place(x=5, y=50)
+    def display_question(self, question):
+        print('Correct answer: ', question.correct_answer)
+        # question text
+        self.question_text_label['text'] = question.text_of_question
 
-user_answer = StringVar()
+        for i, choice in enumerate(question.choices, start=0):
+            self.choices_buttons[i]['text'] = choice
+            self.choices_buttons[i]['value'] = choice
 
-question_text_label, choices_buttons = create_quiz_template()
+    def check_answer(self):
+        self.is_correct_label = Label(self.frame, text='', fg='red', bg='white', font=(app.FONT, 15, " bold"))
+        self.is_correct_label.place(x=445, y=390)
 
-check_answer_button = Button(frame, text='Check', command=check_answer, bg="red", fg="white",
-                             font=(app.FONT, 18, " bold"))
-check_answer_button.place(x=700, y=450)
-
-display_question(quiz.get_question())
-
-
-root.mainloop()
+        if self.quiz.check_answer(self.user_answer.get()):
+            self.is_correct_label['fg'] = 'green'
+            self.is_correct_label['text'] = 'Correct answer'
+            self.root.after(1000, self.is_correct_label.destroy)
+            self.display_question(self.quiz.get_question())
+        else:
+            self.is_correct_label['fg'] = 'red'
+            self.is_correct_label[
+                'text'] = f'Incorrect answer!\n Right one: {self.quiz.current_question.correct_answer}'
+            showinfo("Result", f"Your result: {self.quiz.score}\nBest result: {app.USER.best_score}")
+            self.root.destroy()
+            mainpage.MainGUI()

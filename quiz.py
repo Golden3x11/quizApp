@@ -3,6 +3,7 @@ from random import shuffle
 import requests
 
 import app
+import database_connection
 
 
 class Question:
@@ -20,6 +21,7 @@ class Question:
 
 class Quiz:
     def __init__(self, difficulty=None, chunk_of_questions=10):
+        self.user = app.USER
         self.current_question: Question = Question('', '', [])
         self.score = 0
         self.difficulty = difficulty
@@ -64,9 +66,10 @@ class Quiz:
             return True
         else:
             self.questions.clear()
-            if app.USER.best_score < self.score:
-                app.USER.best_score = self.score
-
+            if self.user.best_score < self.score:
+                self.user.best_score = self.score
+                database_connection.update_best_result(self.user, self.score)
+            database_connection.add_result_to_db(self.user, self.score)
             return False
 
 

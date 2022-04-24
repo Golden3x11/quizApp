@@ -1,3 +1,4 @@
+import mainpage
 
 FONT = 'arial'
 WIDTH = 900
@@ -8,9 +9,9 @@ POSITION_H = 0
 USER = None
 
 
-def user_logged(login):
+def user_logged(id_u, login, score):
     global USER
-    USER = User(login)
+    USER = User(id_u, login, score)
 
 
 def user_logout():
@@ -33,4 +34,4 @@ class User:
 
 
 if __name__ == '__main__':
-    import mainpage
+    mainpage.MainGUI()
