@@ -18,6 +18,11 @@ class QuizGUI:
         self.question_text = None
         self.is_correct_label = None
 
+        self.user_info_label = None
+        self.score_label = None
+        self.create_user_info_bar()
+        self.display_user_info()
+
         self.frame = Frame(self.root, width=890, height=550, bg='white')
         self.frame.place(x=5, y=50)
 
@@ -33,12 +38,22 @@ class QuizGUI:
 
         self.root.mainloop()
 
+    def create_user_info_bar(self):
+        self.user_info_label = Label(self.root, text='', font=(app.FONT, 15))
+        self.user_info_label.place(x=0, y=20, anchor='w')
+        self.score_label = Label(self.root, text='', font=(app.FONT, 18))
+        self.score_label.place(x=app.WIDTH-10, y=20, anchor='e')
+
+    def display_user_info(self):
+        self.user_info_label['text'] = f'{app.USER.login}\nBest score: {app.USER.best_score}'
+        self.score_label['text'] = f'Your score: {self.quiz.score}'
+
     def create_quiz_template(self):
         self.question_text = Label(self.frame, text="", wraplength=750, font=(app.FONT, 25, 'bold'),
                                    fg='black')
         self.question_text.place(x=100, y=70)
 
-        y_position = 200
+        y_position = 220
         choices = []
         for _ in range(4):
             radio_button = Radiobutton(self.frame, text="", variable=self.user_answer, value="",
@@ -63,6 +78,7 @@ class QuizGUI:
         self.is_correct_label.place(x=445, y=390)
 
         if self.quiz.check_answer(self.user_answer.get()):
+            self.display_user_info()
             self.is_correct_label['fg'] = 'green'
             self.is_correct_label['text'] = 'Correct answer'
             self.root.after(1000, self.is_correct_label.destroy)
