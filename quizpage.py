@@ -48,9 +48,10 @@ def check_answer():
         root.destroy()
 
 
+# GUI
 quiz = quiz.Quiz()
 root = Tk()
-root.geometry('900x600')
+root.geometry("{}x{}+{}+{}".format(app.WIDTH, app.HEIGHT, app.POSITION_W, app.POSITION_H))
 root.resizable(False, False)
 root.title('Quiz App')
 
