@@ -56,7 +56,7 @@ class Quiz:
             self.load_questions()
         return self.current_question
 
-    def collect_answer(self, answer):
+    def check_answer(self, answer):
         if self.current_question.isAnswerCorrect(answer):
             self.score += 1
             return True
@@ -65,14 +65,14 @@ class Quiz:
             return False
 
 
-quiz = Quiz()
-while True:
-    question = quiz.get_question()
-    text, choices = question.get_text_and_choices()
-
-    print(text)
-    print(*enumerate(choices))
-    print(question.correct_answer)
-    x = int(input())
-    print(quiz.collect_answer(choices[x]))
+# quiz = Quiz()
+# while True:
+#     question = quiz.get_question()
+#     text, choices = question.get_text_and_choices()
+#
+#     print(text)
+#     print(*enumerate(choices))
+#     print(question.correct_answer)
+#     x = int(input())
+#     print(quiz.collect_answer(choices[x]))
 
