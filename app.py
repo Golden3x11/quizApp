@@ -26,8 +26,10 @@ def is_user_logged():
 
 
 class User:
-    def __init__(self, login):
+    def __init__(self, id_u, login, score):
+        self.id = id_u
         self.login = login
+        self.best_score = score
 
 
 if __name__ == '__main__':

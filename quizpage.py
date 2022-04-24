@@ -44,7 +44,7 @@ def check_answer():
     else:
         is_correct_label['fg'] = 'red'
         is_correct_label['text'] = f'Incorrect answer!\n Right one: {quiz.current_question.correct_answer}'
-        showinfo("Result", f"Your result: {quiz.score}")
+        showinfo("Result", f"Your result: {quiz.score}\nBest result: {app.USER.best_score}")
         root.destroy()
 
 

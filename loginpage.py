@@ -24,12 +24,12 @@ def sign_in():
                                                  database='quizapp')
             if connection.is_connected():
                 cursor = connection.cursor()
-                query = 'select userlogin, pswd from users where userlogin=%s and pswd=MD5(%s)'
+                query = 'select idU, userlogin, pswd, score from users where userlogin=%s and pswd=MD5(%s)'
                 cursor.execute(query, (login_entry.get(), password_entry.get()))
                 if cursor.fetchone() is None:
                     showerror('Error', 'Invalid Login or Password')
                 else:
-                    app.userLogged(login_entry.get())
+                    app.userLogged(cursor[0], cursor[1], cursor[3])
                     main_window()
 
         except Error as e:

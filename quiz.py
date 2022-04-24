@@ -2,6 +2,8 @@ import html
 from random import shuffle
 import requests
 
+import app
+
 
 class Question:
     def __init__(self, question: str, correct_answer: str, choices: list):
@@ -62,6 +64,9 @@ class Quiz:
             return True
         else:
             self.questions.clear()
+            if app.USER.best_score < self.score:
+                app.USER.best_score = self.score
+
             return False
 
 

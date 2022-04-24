@@ -8,6 +8,10 @@ def login_window():
     import loginpage
 
 
+def ranking_window():
+    import rankingpage
+
+
 def quiz_window():
     root.destroy()
     import quizpage
@@ -52,5 +56,9 @@ else:
     logout_button = Button(frame, text='Logout', font=(app.FONT, 18, 'bold'), bd=0, bg='gray20', fg='white',
                            command=logout)
     logout_button.place(x=450, y=250)
+
+rank_button = Button(frame, text='Ranking', font=(app.FONT, 18, 'bold'), bd=0, bg='gray20', fg='white',
+                     command=ranking_window)
+rank_button.place(x=35, y=250)
 
 root.mainloop()
