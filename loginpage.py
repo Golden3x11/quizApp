@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.messagebox import *
 import mysql.connector
 from mysql.connector import Error
+import app
 
 
 # Functions
@@ -24,7 +25,9 @@ def sign_in():
                 if cursor.fetchone() is None:
                     showerror('Error', 'Invalid Login or Password')
                 else:
-                    showinfo('Success', 'Welcome')
+                    app.userLogged(login_entry.get())
+                    root.destroy()
+                    import mainpage
 
         except Error as e:
 

@@ -2,11 +2,11 @@ import time
 from tkinter import *
 from tkinter.messagebox import *
 import quiz
-import app_constants
+import app
 
 
 def create_quiz_template():
-    question_text = Label(frame, text="", wraplength=750, font=(app_constants.FONT, 25, 'bold'),
+    question_text = Label(frame, text="", wraplength=750, font=(app.FONT, 25, 'bold'),
                           fg='black')
     question_text.place(x=100, y=70)
 
@@ -14,7 +14,7 @@ def create_quiz_template():
     choices = []
     for _ in range(4):
         radio_button = Radiobutton(frame, text="", variable=user_answer, value="",
-                                   font=(app_constants.FONT, 14))
+                                   font=(app.FONT, 14))
         radio_button.place(x=200, y=y_position)
         choices.append(radio_button)
         y_position += 40
@@ -33,13 +33,13 @@ def display_question(question):
 
 
 def check_answer():
-    is_correct_label = Label(frame, text='', fg='red', bg='white', font=(app_constants.FONT, 15, " bold"))
+    is_correct_label = Label(frame, text='', fg='red', bg='white', font=(app.FONT, 15, " bold"))
     is_correct_label.place(x=445, y=390)
 
     if quiz.check_answer(user_answer.get()):
         is_correct_label['fg'] = 'green'
         is_correct_label['text'] = 'Correct answer'
-        root.after(2000, is_correct_label.destroy)
+        root.after(1000, is_correct_label.destroy)
         display_question(quiz.get_question())
     else:
         is_correct_label['fg'] = 'red'
@@ -62,7 +62,7 @@ user_answer = StringVar()
 question_text_label, choices_buttons = create_quiz_template()
 
 check_answer_button = Button(frame, text='Check', command=check_answer, bg="red", fg="white",
-                             font=(app_constants.FONT, 18, " bold"))
+                             font=(app.FONT, 18, " bold"))
 check_answer_button.place(x=700, y=450)
 
 display_question(quiz.get_question())
