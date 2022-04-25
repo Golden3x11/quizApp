@@ -26,6 +26,8 @@ class MainGUI:
                                    command=self.start)
         self.start_button.place(x=280, y=150, anchor=CENTER)
 
+        self.root.bind('<Return>', lambda event: self.start())
+
         self.log_button = Button(self.frame, text='Login', font=(app.FONT, 18, 'bold'), bd=0, bg='gray20',
                                  fg='white',
                                  command=self.login_window)

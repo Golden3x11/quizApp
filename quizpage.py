@@ -34,6 +34,13 @@ class QuizGUI:
                                           font=(app.FONT, 18, " bold"))
         self.check_answer_button.place(x=700, y=450)
 
+        self.root.bind('<Return>', lambda event: self.check_answer())
+        for i, choice in enumerate(self.choices_buttons, start=1):
+            def make_lambda(x):
+                return lambda event: x.select()
+
+            self.root.bind(f"<KeyPress-{i}>", make_lambda(choice))
+
         self.display_question(self.quiz.get_question())
 
         self.root.mainloop()
@@ -70,7 +77,7 @@ class QuizGUI:
         self.question_text_label['text'] = question.text_of_question
 
         for i, choice in enumerate(question.choices, start=0):
-            self.choices_buttons[i]['text'] = choice
+            self.choices_buttons[i]['text'] = f'{choice} ({i+1})'
             self.choices_buttons[i]['value'] = choice
 
     def check_answer(self):

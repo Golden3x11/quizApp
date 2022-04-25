@@ -39,6 +39,8 @@ class LoginGUI:
                                    command=self.log_in)
         self.login_button.place(x=450, y=240)
 
+        self.root.bind('<Return>', lambda event: self.log_in())
+
         self.root.mainloop()
 
     def register_window(self):

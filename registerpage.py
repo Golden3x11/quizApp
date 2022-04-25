@@ -40,6 +40,8 @@ class RegisterGUI:
                                       command=self.register)
         self.register_button.place(x=350, y=175)
 
+        self.root.bind('<Return>', lambda event: self.register())
+
         self.root.mainloop()
 
     def clear(self):
@@ -82,4 +84,3 @@ class RegisterGUI:
                     connection.close()
             if success:
                 self.root.destroy()
-                import mainpage
