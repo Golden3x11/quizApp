@@ -3,6 +3,7 @@ from tkinter.messagebox import *
 import mysql.connector
 from mysql.connector import Error
 import app
+import database_connection
 import mainpage
 import rankingpage
 import registerpage
@@ -52,26 +53,8 @@ class LoginGUI:
         if self.login_entry.get() == '' or self.password_entry.get() == '':
             showerror('Error', 'All Fields Are Required')
         else:
-            try:
-                connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
-                                                     database='quizapp')
-                if connection.is_connected():
-                    cursor = connection.cursor()
-                    query = 'select idU, userlogin, pswd, bestScore from users where userlogin=%s and pswd=MD5(%s)'
-                    cursor.execute(query, (self.login_entry.get(), self.password_entry.get()))
-                    data = cursor.fetchall()
-                    if not data:
-                        showerror('Error', 'Invalid Login or Password')
-                    else:
-                        for row in data:
-                            app.user_logged(row[0], row[1], row[3])
-                            self.close_window()
+            database_connection.log_in(self, self.login_entry.get(), self.password_entry.get())
 
-            except Error as e:
-
-                print("Error while connecting to MySQL", e)
-
-            finally:
-                if connection.is_connected():
-                    cursor.close()
-                    connection.close()
+    @staticmethod
+    def wrong_log():
+        showerror('Error', 'Invalid Login or Password')

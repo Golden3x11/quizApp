@@ -4,6 +4,32 @@ from mysql.connector import Error
 import app
 
 
+def log_in(loginPage, login, password):
+    try:
+        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
+                                             database='quizapp')
+        if connection.is_connected():
+            cursor = connection.cursor()
+            query = 'select idU, userlogin, pswd, bestScore from users where userlogin=%s and pswd=MD5(%s)'
+            cursor.execute(query, (login, password))
+            data = cursor.fetchall()
+            if not data:
+                loginPage.wrong_log()
+            else:
+                for row in data:
+                    app.user_logged(row[0], row[1], row[3])
+                    loginPage.close_window()
+
+    except Error as e:
+
+        print("Error while connecting to MySQL", e)
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+
 def update_best_result(user, score):
     try:
         connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
