@@ -1,5 +1,5 @@
 import html
-from random import shuffle
+import random
 import requests
 
 import app
@@ -7,8 +7,8 @@ import database_connection
 
 
 class Question:
-    def __init__(self, question: str, correct_answer: str, choices: list):
-        self.text_of_question = question
+    def __init__(self, text_of_question, correct_answer, choices):
+        self.text_of_question = text_of_question
         self.correct_answer = correct_answer
         self.choices = choices
 
@@ -35,7 +35,10 @@ class Quiz:
         self.load_questions()
 
     def load_questions(self):
-        response = requests.get(url="https://opentdb.com/api.php", params=self.parameters)
+        try:
+            response = requests.get(url="https://opentdb.com/api.php", params=self.parameters)
+        except requests.exceptions.RequestException as e:
+            raise ConnectionError(e)
         questions = response.json()["results"]
 
         for question in questions:
@@ -44,11 +47,11 @@ class Quiz:
             correct_answer = html.unescape(question['correct_answer'])
             choices.append(correct_answer)
 
-            incorrect_answers = question["incorrect_answers"]
-            for incorrect_answer in incorrect_answers:
-                choices.append(html.unescape(incorrect_answer))
+            other_answers = question["incorrect_answers"]
+            for answer in other_answers:
+                choices.append(html.unescape(answer))
                 
-            shuffle(choices)
+            random.shuffle(choices)
             self.questions.append(Question(text_of_question, correct_answer, choices))
 
     def get_score(self):

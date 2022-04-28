@@ -68,7 +68,7 @@ class MainGUI:
         if app.is_user_logged():
             self.quiz_window()
         else:
-            showerror('Error', 'You need to be logged first')
+            showwarning('Warning', 'You need to be logged first')
             self.login_window()
 
 # GUI
