@@ -95,7 +95,7 @@ def get_ranking():
     return rank
 
 
-def register(self, login, password):
+def register(login, password):
     success = False
     try:
         connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
@@ -111,7 +111,6 @@ def register(self, login, password):
                 cursor.execute(query, (login, password))
                 connection.commit()
                 success = True
-                self.clear()
 
     except Error as e:
         print("Error while connecting to MySQL", e)

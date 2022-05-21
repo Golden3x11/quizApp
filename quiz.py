@@ -63,8 +63,8 @@ class Quiz:
             self.load_questions()
         return self.current_question
 
-    def check_answer(self, answer):
-        if self.current_question.isAnswerCorrect(answer):
+    def check_answer(self, id_answer):
+        if self.current_question.isAnswerCorrect(self.current_question.choices[int(id_answer)]):
             self.score += 1
             return True
         else:

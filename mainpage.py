@@ -48,7 +48,7 @@ class MainGUI:
     def update_login_button(self):
         if app.is_user_logged():
             self.log_button['text'] = 'Logout'
-            self.log_button['command'] = self.logout
+
         else:
             self.log_button['text'] = 'Login'
             self.log_button['command'] = self.login_window

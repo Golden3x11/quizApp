@@ -2,15 +2,13 @@ from tkinter import *
 from customtkinter import *
 from tkinter.messagebox import *
 import database_connection
-import register_page
 import app
 
 
-class LoginGUI(Toplevel):
-    def __init__(self, master, refreshMain):
+class RegisterGui(Toplevel):
+    def __init__(self, master):
         super().__init__(master)
         self.master = master
-        self.refreshMain = refreshMain
         self.geometry("{}x{}".format(320, 300))
 
         self.grid_columnconfigure(0, weight=1)
@@ -21,7 +19,7 @@ class LoginGUI(Toplevel):
         self.frame.rowconfigure(0, weight=10)
         self.frame.rowconfigure((1, 2, 3, 4), weight=1)
         self.frame.columnconfigure((0, 1), weight=1)
-        self.title_label = CTkLabel(self.frame, text="Log in", text_font=(app.FONT, -25, 'bold'))
+        self.title_label = CTkLabel(self.frame, text="Registration Form", text_font=(app.FONT, -25, 'bold'))
         self.title_label.grid(row=0, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 
         self.login_entry = CTkEntry(self.frame, width=250, placeholder_text='login')
@@ -30,31 +28,30 @@ class LoginGUI(Toplevel):
         self.password_entry = CTkEntry(self.frame, width=250, placeholder_text='password', show='*')
         self.password_entry.grid(row=2, column=0, columnspan=2, padx=20, pady=5, sticky='we')
 
-        self.registration_button = CTkButton(self.frame, text='register New Account?',
-                                             borderwidth=0, fg_color=None, hover_color=None,
-                                             command=self.register_window)
-        self.registration_button.grid(row=3, column=1, padx=20, pady=5, sticky='nswe')
+        self.confirm_password_entry = CTkEntry(self.frame, width=250, placeholder_text='confirm password', show='*')
+        self.confirm_password_entry.grid(row=3, column=0, columnspan=2, padx=20, pady=5, sticky='we')
 
-        self.login_button = CTkButton(self.frame, text='Log in', command=self.log_in)
+        self.login_button = CTkButton(self.frame, text='Register', command=self.register)
         self.login_button.grid(row=4, column=0, columnspan=2, padx=20, pady=20, sticky='nswe')
 
         self.bind('<Return>', lambda event: self.log_in())
 
-    def register_window(self):
-        self.destroy()
-        register_page.RegisterGui(master=self.master)
+    def clear(self):
+        self.password_entry.delete(0, END)
+        self.login_entry.delete(0, END)
+        self.confirm_password_entry.delete(0, END)
 
-    def close_window(self):
-        self.destroy()
-        self.refreshMain()
-
-    def log_in(self):
-        if self.login_entry.get() == '' or self.password_entry.get() == '':
+    def register(self):
+        if self.login_entry.get() == '' or self.password_entry.get() == '' or self.confirm_password_entry.get() == '':
             showerror('Error', 'All Fields Are Required')
-            self.destroy()
-        else:
-            database_connection.log_in(self, self.login_entry.get(), self.password_entry.get())
 
-    @staticmethod
-    def wrong_log():
-        showerror('Error', 'Invalid Login or Password')
+        elif self.password_entry.get() != self.confirm_password_entry.get():
+            showerror('Error', 'Password Mismatch')
+
+        else:
+            if database_connection.register(self.login_entry.get(), self.password_entry.get()):
+                showinfo('Success', "Registration Successful")
+                self.destroy()
+            else:
+                showerror('Error', 'User Already Exists')
+                self.clear()
