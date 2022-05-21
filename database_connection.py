@@ -93,3 +93,32 @@ def get_ranking():
             connection.close()
 
     return rank
+
+
+def register(self, login, password):
+    success = False
+    try:
+        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
+                                             database='quizapp')
+        if connection.is_connected():
+            cursor = connection.cursor()
+            query = 'select * from users where userlogin=%s'
+            cursor.execute(query, (login,))
+            if cursor.fetchone() is not None:
+                success = False
+            else:
+                query = 'insert into users (userlogin, pswd) values (%s, MD5(%s))'
+                cursor.execute(query, (login, password))
+                connection.commit()
+                success = True
+                self.clear()
+
+    except Error as e:
+        print("Error while connecting to MySQL", e)
+
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+
+    return success

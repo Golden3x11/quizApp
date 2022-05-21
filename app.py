@@ -1,6 +1,6 @@
-import mainpage
+import main_page
 
-FONT = 'arial'
+FONT = 'Roboto Medium'
 WIDTH = 900
 HEIGHT = 600
 POSITION_W = 0
@@ -34,4 +34,5 @@ class User:
 
 
 if __name__ == '__main__':
-    mainpage.MainGUI()
+    app = main_page.MainGui()
+    app.mainloop()

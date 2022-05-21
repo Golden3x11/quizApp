@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter.messagebox import *
 import mysql.connector
 from mysql.connector import Error
+import database_connection
 import app
 
 
@@ -57,30 +58,9 @@ class RegisterGUI:
             showerror('Error', 'Password Mismatch')
 
         else:
-            success = False
-            try:
-                connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
-                                                     database='quizapp')
-                if connection.is_connected():
-                    cursor = connection.cursor()
-                    query = 'select * from users where userlogin=%s'
-                    cursor.execute(query, (self.login_entry.get(),))
-                    if cursor.fetchone() is not None:
-                        showerror('Error', 'User Already Exists')
-                    else:
-                        query = 'insert into users (userlogin, pswd) values (%s, MD5(%s))'
-                        cursor.execute(query, (self.login_entry.get(), self.password_entry.get()))
-                        connection.commit()
-                        showinfo('Success', "Registration Successful")
-                        success = True
-                        self.clear()
-
-            except Error as e:
-                print("Error while connecting to MySQL", e)
-
-            finally:
-                if connection.is_connected():
-                    cursor.close()
-                    connection.close()
-            if success:
+            if database_connection.register(self.login_entry.get(), self.password_entry.get()):
+                showinfo('Success', "Registration Successful")
+            else:
+                showerror('Error', 'User Already Exists')
                 self.root.destroy()
+
