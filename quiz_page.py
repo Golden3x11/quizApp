@@ -3,7 +3,6 @@ from tkinter.messagebox import *
 from customtkinter import *
 
 import app
-import main_page
 import quiz
 
 
@@ -25,7 +24,7 @@ class QuizPage(CTkFrame):
         self.grid(row=0, column=0, sticky="nsew", padx=15, pady=15)
 
         self.question_text_label = CTkLabel(self, text='', wraplength=800,
-                                            text_font=(app.FONT, -45, 'bold'))
+                                            text_font=(app.App.FONT, -45, 'bold'))
         self.question_text_label.grid(row=1, column=0, columnspan=3, pady=20, padx=20, sticky='n')
 
         self.user_answer = StringVar(self, '-1')
@@ -36,7 +35,7 @@ class QuizPage(CTkFrame):
             self.choices_radiobutton.append(rb)
 
         self.check_answer_button = CTkButton(self, text='Check', command=self.check_answer,
-                                             text_font=(app.FONT, -30, 'bold'))
+                                             text_font=(app.App.FONT, -30, 'bold'))
         self.check_answer_button.grid(row=7, column=2, pady=20, padx=20, sticky='n')
 
         self.master.bind('<Return>', lambda event: self.check_answer())
@@ -46,7 +45,8 @@ class QuizPage(CTkFrame):
 
             self.master.bind(f"<KeyPress-{i}>", make_lambda(choice))
 
-        self.display_question(self.quiz.get_question())
+        self.display_question(self.quiz.get_new_question())
+        self.is_correct_label = None
 
         self.user_frame = CTkFrame(self, height=100, fg_color='#B0A8B9')
         self.user_frame.grid(row=0, column=0, columnspan=3,
@@ -59,19 +59,19 @@ class QuizPage(CTkFrame):
         self.display_user_info()
 
     def display_user_info(self):
-        self.user_info_label.config(text=f'USER: {app.USER.login}\nBEST SCORE: {app.USER.best_score}')
+        self.user_info_label.config(text=f'USER: {app.App.get_USER().login}\nBEST SCORE: {app.App.get_USER().best_score}')
         self.score_label.config(text=f'YOUR SCORE: {self.quiz.score}')
 
     def display_question(self, question):
         print('Correct answer: ', question.correct_answer)
-        # question text
+
         self.question_text_label.config(text=question.text_of_question)
 
         for i, choice in enumerate(question.choices, start=0):
             self.choices_radiobutton[i].config(text=f'{choice} ({i + 1})')
 
     def check_answer(self):
-        self.is_correct_label = CTkLabel(self, text='', text_font=(app.FONT, -30, 'bold'))
+        self.is_correct_label = CTkLabel(self, text='', text_font=(app.App.FONT, -30, 'bold'))
         self.is_correct_label.grid(column=1, row=7)
         if self.user_answer.get() != '-1':
             if self.quiz.check_answer(self.user_answer.get()):
@@ -79,11 +79,11 @@ class QuizPage(CTkFrame):
                 self.is_correct_label.config(text='Correct answer', fg_color='green')
                 self.after(1000, self.is_correct_label.destroy)
                 self.user_answer.set('-1')
-                self.display_question(self.quiz.get_question())
+                self.display_question(self.quiz.get_new_question())
             else:
                 self.is_correct_label.config(
                     text=f'Incorrect answer!\n Right one: {self.quiz.current_question.correct_answer}', fg_color='red')
-                showinfo("Result", f"Your result: {self.quiz.score}\nBest result: {app.USER.best_score}")
+                showinfo("Result", f"Your result: {self.quiz.score}\nBest result: {app.App.get_USER().best_score}")
                 self.master.unbind('<Return>')
                 for i in range(1, 5):
                     self.master.unbind(f"<KeyPress-{i}>")

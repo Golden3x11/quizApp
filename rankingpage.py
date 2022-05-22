@@ -19,7 +19,7 @@ class RankingGUI(Toplevel):
         self.frame.rowconfigure(0, weight=1)
         self.frame.rowconfigure(1, weight=1)
         self.frame.columnconfigure((0, 1), weight=1)
-        self.rank_label = CTkLabel(self.frame, text="Ranking TOP 10", text_font=(app.FONT, -30, 'bold'))
+        self.rank_label = CTkLabel(self.frame, text="Ranking TOP 10", text_font=(app.App.FONT, -30, 'bold'))
         self.rank_label.grid(row=0, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 
         self.ranking = database_connection.get_ranking()
@@ -30,8 +30,8 @@ class RankingGUI(Toplevel):
         width = 100, 300, 100, 300
         style = Style()
         style.theme_use('clam')
-        style.configure('Treeview.Heading', font=(app.FONT, 20))
-        style.configure('Treeview', font=(app.FONT, 12), )
+        style.configure('Treeview.Heading', font=(app.App.FONT, 20))
+        style.configure('Treeview', font=(app.App.FONT, 12), )
         tree = Treeview(self.frame, columns=columns, show='headings')
         tree.grid(row=1, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 

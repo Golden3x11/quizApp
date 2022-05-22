@@ -1,38 +1,72 @@
 import main_page
-
-FONT = 'Roboto Medium'
-WIDTH = 900
-HEIGHT = 650
-POSITION_W = 0
-POSITION_H = 0
-
-USER = None
+from customtkinter import *
 
 
-def user_logged(id_u, login, score):
-    global USER
-    USER = User(id_u, login, score)
+class App(CTk):
+    __USER = None
+    FONT = 'Roboto Medium'
+    WIDTH = 900
+    HEIGHT = 650
+    POSITION_W = 0
+    POSITION_H = 0
 
+    def __init__(self):
+        super().__init__()
+        set_appearance_mode('light')
+        set_default_color_theme('dark-blue')
 
-def user_logout():
-    global USER
-    USER = None
+        self.title('Quiz App')
+        App.POSITION_W = int(self.winfo_screenwidth() / 2 - App.WIDTH / 2)
+        App.POSITION_H = int(self.winfo_screenheight() / 2 - App.HEIGHT / 2)
+        self.geometry("{}x{}+{}+{}".format(App.WIDTH, App.HEIGHT, App.POSITION_W, App.POSITION_H))
 
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.frame = main_page.MainGui(self)
 
-def is_user_logged():
-    if USER is None:
-        return False
-    else:
-        return True
+    @staticmethod
+    def get_USER():
+        return App.__USER
+
+    @staticmethod
+    def user_logged(id_u, login, score):
+        App.__USER = User(id_u, login, score)
+
+    @staticmethod
+    def user_logout():
+        App.__USER = None
+
+    @staticmethod
+    def is_user_logged():
+        if App.__USER is None:
+            return False
+        else:
+            return True
 
 
 class User:
     def __init__(self, id_u, login, score):
-        self.id = id_u
-        self.login = login
-        self.best_score = score
+        self.__id = id_u
+        self.__login = login
+        self.__best_score = score
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def login(self):
+        return self.__login
+
+    @property
+    def best_score(self):
+        return self.__best_score
+
+    @best_score.setter
+    def best_score(self, value):
+        self.__best_score = value
 
 
 if __name__ == '__main__':
-    app = main_page.App()
+    app = App()
     app.mainloop()

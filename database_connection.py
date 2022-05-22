@@ -17,7 +17,7 @@ def log_in(loginPage, login, password):
                 loginPage.wrong_log()
             else:
                 for row in data:
-                    app.user_logged(row[0], row[1], row[3])
+                    app.App.user_logged(row[0], row[1], row[3])
                     loginPage.close_window()
 
     except Error as e:

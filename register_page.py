@@ -19,7 +19,7 @@ class RegisterGui(Toplevel):
         self.frame.rowconfigure(0, weight=10)
         self.frame.rowconfigure((1, 2, 3, 4), weight=1)
         self.frame.columnconfigure((0, 1), weight=1)
-        self.title_label = CTkLabel(self.frame, text="Registration Form", text_font=(app.FONT, -25, 'bold'))
+        self.title_label = CTkLabel(self.frame, text="Registration Form", text_font=(app.App.FONT, -25, 'bold'))
         self.title_label.grid(row=0, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 
         self.login_entry = CTkEntry(self.frame, width=250, placeholder_text='login')
@@ -34,14 +34,14 @@ class RegisterGui(Toplevel):
         self.login_button = CTkButton(self.frame, text='Register', command=self.register)
         self.login_button.grid(row=4, column=0, columnspan=2, padx=20, pady=20, sticky='nswe')
 
-        self.bind('<Return>', lambda event: self.log_in())
+        self.bind('<Return>', lambda event: self.register())
 
     def clear(self):
         self.password_entry.delete(0, END)
         self.login_entry.delete(0, END)
         self.confirm_password_entry.delete(0, END)
 
-    def register(self):
+    def register(self, **kwargs):
         if self.login_entry.get() == '' or self.password_entry.get() == '' or self.confirm_password_entry.get() == '':
             showerror('Error', 'All Fields Are Required')
 
