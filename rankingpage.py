@@ -1,39 +1,42 @@
 from tkinter import *
 from tkinter.ttk import Treeview, Style
+from customtkinter import *
 import app
 import database_connection
 
 
-class RankingGUI:
-    def __init__(self):
-        self.tree = None
-        self.root = Tk()
-        self.root.geometry("{}x{}".format(800, app.HEIGHT))
-        self.root.resizable(False, False)
-        self.root.title('Ranking Page')
+class RankingGUI(Toplevel):
+    def __init__(self, master):
+        super().__init__(master)
+        self.master = master
+        self.geometry("{}x{}".format(900, 400))
 
-        self.frame = Frame(self.root, width=800, height=600, bg='white')
-        self.frame.place(x=0, y=0)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+        self.frame = CTkFrame(self)
+        self.frame.grid(row=0, column=0, sticky="nswe", padx=15, pady=15)
 
-        self.login_label = Label(self.frame, text="Ranking TOP 10", font=(app.FONT, 35, 'bold'), bg='white')
-        self.login_label.place(x=400, y=20, anchor=CENTER)
+        self.frame.rowconfigure(0, weight=1)
+        self.frame.rowconfigure(1, weight=1)
+        self.frame.columnconfigure((0, 1), weight=1)
+        self.rank_label = CTkLabel(self.frame, text="Ranking TOP 10", text_font=(app.FONT, -30, 'bold'))
+        self.rank_label.grid(row=0, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 
         self.ranking = database_connection.get_ranking()
         self.display_ranking()
 
-        self.root.mainloop()
-
     def display_ranking(self):
         columns = ('Place', 'Player', 'Score', 'Date')
         width = 100, 300, 100, 300
-        # style = Style()
-        # style.configure('Treeview.Heading', font=(app.FONT, 20))
-        # style.configure('Treeview', font=(app.FONT, 18), rowheigth=45)
+        style = Style()
+        style.theme_use('clam')
+        style.configure('Treeview.Heading', font=(app.FONT, 20))
+        style.configure('Treeview', font=(app.FONT, 12), )
         tree = Treeview(self.frame, columns=columns, show='headings')
-        tree.place(x=0, y=60)
+        tree.grid(row=1, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 
         for i, col in enumerate(columns):
-            tree.column(col, width=width[i])
+            tree.column(col, width=width[i], anchor=CENTER)
             tree.heading(col, text=col)
 
         for row in self.ranking:

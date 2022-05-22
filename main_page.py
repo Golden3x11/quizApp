@@ -7,11 +7,11 @@ import quiz_page
 import rankingpage
 
 
-class MainGui(CTk):
+class App(CTk):
     def __init__(self):
         super().__init__()
         set_appearance_mode('light')
-        set_default_color_theme('blue')
+        set_default_color_theme('dark-blue')
 
         self.title('Quiz App')
         app.POSITION_W = int(self.winfo_screenwidth() / 2 - app.WIDTH / 2)
@@ -20,26 +20,26 @@ class MainGui(CTk):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        frame = MainPage(self)
+        self.frame = MainGui(self)
 
 
-class MainPage(CTkFrame):
+class MainGui(CTkFrame):
     def __init__(self, master):
-        super().__init__(master)
+        super().__init__(master, fg_color='#FCF7FF')
         self.master = master
         self.rowconfigure(0, weight=10)
         self.rowconfigure(1, weight=10)
         self.rowconfigure(2, weight=1)
         self.columnconfigure((0, 2), weight=1)
         self.columnconfigure(1, weight=10)
-        self.grid(row=0, column=0, sticky="nsew", padx=5, pady=5)
+        self.grid(row=0, column=0, sticky="nsew", padx=15, pady=15)
 
-        self.title_label = CTkLabel(self, text="Quiz App", text_font=(app.FONT, -70, 'bold'))
-        self.title_label.grid(column=1, row=0, sticky='n', pady=40, padx=20)
+        self.title_label = CTkLabel(self, text="Quiz App", text_font=('Impact', -200, 'bold'))
+        self.title_label.grid(column=0, row=0,columnspan=3, sticky='n', pady=40, padx=20)
 
         self.start_button = CTkButton(self, text='START', command=self.start,
-                                      fg_color=('green', 'green'), text_font=(app.FONT, -90, 'bold'),
-                                      hover_color=('gray38', 'gray38'))
+                                      fg_color=('#00C0A3', '#00C0A3'), text_font=(app.FONT, -80, 'bold'),
+                                      hover_color=('#00896F', '#00896F'))
         self.start_button.grid(column=1, row=1, sticky='n', pady=20, padx=20)
 
         self.log_b_var = StringVar(self, 'Login')
@@ -67,9 +67,8 @@ class MainPage(CTkFrame):
     def login_window(self):
         login_page.LoginGUI(self, self.update_login_button)
 
-    @staticmethod
-    def ranking_window():
-        rankingpage.RankingGUI()
+    def ranking_window(self):
+        rankingpage.RankingGUI(self.master)
 
     def quiz_window(self):
         frame = quiz_page.QuizPage(self.master)

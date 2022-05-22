@@ -15,7 +15,7 @@ class LoginGUI(Toplevel):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.frame = CTkFrame(self)
+        self.frame = CTkFrame(self, fg_color='#FCF7FF')
         self.frame.grid(row=0, column=0, sticky="nswe", padx=15, pady=15)
 
         self.frame.rowconfigure(0, weight=10)

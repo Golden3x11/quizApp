@@ -2,7 +2,7 @@ import main_page
 
 FONT = 'Roboto Medium'
 WIDTH = 900
-HEIGHT = 600
+HEIGHT = 650
 POSITION_W = 0
 POSITION_H = 0
 
@@ -34,5 +34,5 @@ class User:
 
 
 if __name__ == '__main__':
-    app = main_page.MainGui()
+    app = main_page.App()
     app.mainloop()
