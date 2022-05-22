@@ -4,7 +4,8 @@ from mysql.connector import Error
 import app
 
 
-def log_in(loginPage, login, password):
+def log_in(login, password):
+    success = []
     try:
         connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
                                              database='quizapp')
@@ -14,11 +15,10 @@ def log_in(loginPage, login, password):
             cursor.execute(query, (login, password))
             data = cursor.fetchall()
             if not data:
-                loginPage.wrong_log()
+                success = []
             else:
                 for row in data:
-                    app.App.user_logged(row[0], row[1], row[3])
-                    loginPage.close_window()
+                    success = [row[0], row[1], row[3]]
 
     except Error as e:
 
@@ -28,6 +28,7 @@ def log_in(loginPage, login, password):
         if connection.is_connected():
             cursor.close()
             connection.close()
+    return success
 
 
 def update_best_result(user, score):

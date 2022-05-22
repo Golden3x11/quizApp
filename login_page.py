@@ -53,8 +53,10 @@ class LoginGUI(Toplevel):
             showerror('Error', 'All Fields Are Required')
             self.destroy()
         else:
-            database_connection.log_in(self, self.login_entry.get(), self.password_entry.get())
+            result = database_connection.log_in(self.login_entry.get(), self.password_entry.get())
+            if not result:
+                showerror('Error', 'Invalid Login or Password')
+            else:
+                app.App.user_logged(result[0], result[1], result[2])
+                self.close_window()
 
-    @staticmethod
-    def wrong_log():
-        showerror('Error', 'Invalid Login or Password')
