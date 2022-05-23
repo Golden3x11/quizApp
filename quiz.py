@@ -14,6 +14,7 @@ class Question:
 
     def get_text_and_choices(self):
         return self.__text_of_question, self.__choices
+
     @property
     def correct_answer(self):
         return self.__correct_answer
@@ -88,5 +89,6 @@ class Quiz:
             if self.__user.best_score < self.score:
                 self.__user.best_score = self.score
                 database_connection.update_best_result(self.__user, self.score)
+
             database_connection.add_result_to_db(self.__user, self.score)
             return False

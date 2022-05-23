@@ -55,8 +55,7 @@ class MainGui(CTkFrame):
         rankingpage.RankingGUI(self.master)
 
     def quiz_window(self):
-        frame = quiz_page.QuizPage(self.master)
-        frame.tkraise()
+        quiz_page.QuizPage(self.master)
 
     def start(self):
         if app.App.is_user_logged():

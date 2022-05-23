@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter.messagebox import showerror
 from tkinter.ttk import Treeview, Style
 from customtkinter import *
 import app
@@ -21,9 +22,12 @@ class RankingGUI(Toplevel):
         self.frame.columnconfigure((0, 1), weight=1)
         self.rank_label = CTkLabel(self.frame, text="Ranking TOP 10", text_font=(app.App.FONT, -30, 'bold'))
         self.rank_label.grid(row=0, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
+        try:
+            self.ranking = database_connection.get_ranking()
+            self.display_ranking()
+        except ConnectionError:
+            showerror('Error', 'No data base Connection')
 
-        self.ranking = database_connection.get_ranking()
-        self.display_ranking()
 
     def display_ranking(self):
         columns = ('Place', 'Player', 'Score', 'Date')

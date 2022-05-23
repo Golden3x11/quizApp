@@ -49,9 +49,12 @@ class RegisterGui(Toplevel):
             showerror('Error', 'Password Mismatch')
 
         else:
-            if database_connection.register(self.login_entry.get(), self.password_entry.get()):
-                showinfo('Success', "Registration Successful")
-                self.destroy()
-            else:
-                showerror('Error', 'User Already Exists')
-                self.clear()
+            try:
+                if database_connection.register(self.login_entry.get(), self.password_entry.get()):
+                    showinfo('Success', "Registration Successful")
+                    self.destroy()
+                else:
+                    showerror('Error', 'User Already Exists')
+                    self.clear()
+            except ConnectionError:
+                showerror('Error', 'No data base Connection')

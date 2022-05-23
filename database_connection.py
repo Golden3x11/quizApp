@@ -1,11 +1,10 @@
 import mysql.connector
 from mysql.connector import Error
 
-import app
-
 
 def log_in(login, password):
     success = []
+    connection = None
     try:
         connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
                                              database='quizapp')
@@ -21,19 +20,21 @@ def log_in(login, password):
                     success = [row[0], row[1], row[3]]
 
     except Error as e:
-
-        print("Error while connecting to MySQL", e)
+        raise ConnectionError('Error while connecting to MySQL', e)
 
     finally:
-        if connection.is_connected():
+        if connection is None:
+            pass
+        elif connection.is_connected():
             cursor.close()
             connection.close()
     return success
 
 
 def update_best_result(user, score):
+    connection = None
     try:
-        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
+        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pa2ss',
                                              database='quizapp')
         if connection.is_connected():
             cursor = connection.cursor()
@@ -42,18 +43,20 @@ def update_best_result(user, score):
             connection.commit()
 
     except Error as e:
-
-        print("Error while connecting to MySQL", e)
+        raise ConnectionError('Error while connecting to MySQL', e)
 
     finally:
-        if connection.is_connected():
+        if connection is None:
+            pass
+        elif connection.is_connected():
             cursor.close()
             connection.close()
 
 
 def add_result_to_db(user, score):
+    connection = None
     try:
-        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
+        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pa2ss',
                                              database='quizapp')
         if connection.is_connected():
             cursor = connection.cursor()
@@ -62,17 +65,19 @@ def add_result_to_db(user, score):
             connection.commit()
 
     except Error as e:
-
-        print("Error while connecting to MySQL", e)
+        raise ConnectionError('Error while connecting to MySQL', e)
 
     finally:
-        if connection.is_connected():
+        if connection is None:
+            pass
+        elif connection.is_connected():
             cursor.close()
             connection.close()
 
 
 def get_ranking():
     rank = []
+    connection = None
     try:
         connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
                                              database='quizapp')
@@ -85,11 +90,12 @@ def get_ranking():
                 rank.append((row[0], row[1], row[2], str(row[3])))
 
     except Error as e:
-
-        print("Error while connecting to MySQL", e)
+        raise ConnectionError('Error while connecting to MySQL', e)
 
     finally:
-        if connection.is_connected():
+        if connection is None:
+            pass
+        elif connection.is_connected():
             cursor.close()
             connection.close()
 
@@ -98,6 +104,7 @@ def get_ranking():
 
 def register(login, password):
     success = False
+    connection = None
     try:
         connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
                                              database='quizapp')
@@ -114,10 +121,12 @@ def register(login, password):
                 success = True
 
     except Error as e:
-        print("Error while connecting to MySQL", e)
+        raise ConnectionError('Error while connecting to MySQL', e)
 
     finally:
-        if connection.is_connected():
+        if connection is None:
+            pass
+        elif connection.is_connected():
             cursor.close()
             connection.close()
 
