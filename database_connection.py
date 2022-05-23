@@ -34,7 +34,7 @@ def log_in(login, password):
 def update_best_result(user, score):
     connection = None
     try:
-        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pa2ss',
+        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
                                              database='quizapp')
         if connection.is_connected():
             cursor = connection.cursor()
@@ -56,7 +56,7 @@ def update_best_result(user, score):
 def add_result_to_db(user, score):
     connection = None
     try:
-        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pa2ss',
+        connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
                                              database='quizapp')
         if connection.is_connected():
             cursor = connection.cursor()
