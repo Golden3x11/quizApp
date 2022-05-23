@@ -9,7 +9,7 @@ import rankingpage
 
 class MainGui(CTkFrame):
     def __init__(self, master):
-        super().__init__(master, fg_color='#FCF7FF')
+        super().__init__(master, fg_color='#EEFBFA')
         self.master = master
         self.rowconfigure(0, weight=10)
         self.rowconfigure(1, weight=10)
@@ -22,17 +22,17 @@ class MainGui(CTkFrame):
         self.title_label.grid(column=0, row=0, columnspan=3, sticky='n', pady=40, padx=20)
 
         self.start_button = CTkButton(self, text='START', command=self.start,
-                                      fg_color=('#00C0A3', '#00C0A3'), text_font=(app.App.FONT, -80, 'bold'),
-                                      hover_color=('#00896F', '#00896F'))
+                                      fg_color='#FF9F1C', text_font=(app.App.FONT, -80, 'bold'),
+                                      hover_color='#FFBF69')
         self.start_button.grid(column=1, row=1, sticky='n', pady=20, padx=20)
 
         self.log_b_var = StringVar(self, 'Login')
         self.log_button = CTkButton(self, textvariable=self.log_b_var, command=self.login_window,
-                                    text_font=(app.App.FONT, -30, 'bold'))
+                                    text_font=(app.App.FONT, -30, 'bold'), fg_color='#2EC4B6')
         self.log_button.grid(column=0, row=2, sticky='n', pady=20, padx=20)
 
         self.rank_button = CTkButton(self, text='Ranking', command=self.ranking_window,
-                                     text_font=(app.App.FONT, -30, 'bold'))
+                                     text_font=(app.App.FONT, -30, 'bold'), fg_color='#2EC4B6')
         self.rank_button.grid(column=2, row=2, sticky='n', pady=20, padx=20)
 
     def logout(self):

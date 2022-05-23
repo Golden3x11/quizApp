@@ -13,7 +13,7 @@ class RegisterGui(Toplevel):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.frame = CTkFrame(self, fg_color='#FCF7FF')
+        self.frame = CTkFrame(self, fg_color='#EEFBFA')
         self.frame.grid(row=0, column=0, sticky="nswe", padx=15, pady=15)
 
         self.frame.rowconfigure(0, weight=10)
@@ -31,7 +31,7 @@ class RegisterGui(Toplevel):
         self.confirm_password_entry = CTkEntry(self.frame, width=250, placeholder_text='confirm password', show='*')
         self.confirm_password_entry.grid(row=3, column=0, columnspan=2, padx=20, pady=5, sticky='we')
 
-        self.login_button = CTkButton(self.frame, text='Register', command=self.register)
+        self.login_button = CTkButton(self.frame, text='Register', command=self.register, fg_color='#2EC4B6')
         self.login_button.grid(row=4, column=0, columnspan=2, padx=20, pady=20, sticky='nswe')
 
         self.bind('<Return>', lambda event: self.register())

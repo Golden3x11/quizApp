@@ -15,7 +15,7 @@ class LoginGUI(Toplevel):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.frame = CTkFrame(self, fg_color='#FCF7FF')
+        self.frame = CTkFrame(self, fg_color='#EEFBFA')
         self.frame.grid(row=0, column=0, sticky="nswe", padx=15, pady=15)
 
         self.frame.rowconfigure(0, weight=10)
@@ -35,7 +35,7 @@ class LoginGUI(Toplevel):
                                              command=self.register_window)
         self.registration_button.grid(row=3, column=1, padx=20, pady=5, sticky='nswe')
 
-        self.login_button = CTkButton(self.frame, text='Log in', command=self.log_in)
+        self.login_button = CTkButton(self.frame, text='Log in', command=self.log_in, fg_color='#2EC4B6')
         self.login_button.grid(row=4, column=0, columnspan=2, padx=20, pady=20, sticky='nswe')
 
         self.bind('<Return>', lambda event: self.log_in())
