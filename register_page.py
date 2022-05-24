@@ -19,6 +19,7 @@ class RegisterGui(Toplevel):
         self.frame.rowconfigure(0, weight=10)
         self.frame.rowconfigure((1, 2, 3, 4), weight=1)
         self.frame.columnconfigure((0, 1), weight=1)
+
         self.title_label = CTkLabel(self.frame, text="Registration Form", text_font=(app.App.FONT, -25, 'bold'))
         self.title_label.grid(row=0, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 

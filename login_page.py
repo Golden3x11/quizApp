@@ -10,7 +10,7 @@ class LoginGUI(Toplevel):
     def __init__(self, master, refreshMain):
         super().__init__(master)
         self.master = master
-        self.refreshMain = refreshMain
+        self.refreshMain = refreshMain  # function that update button when loging is successful
         self.geometry("{}x{}".format(320, 300))
 
         self.grid_columnconfigure(0, weight=1)
@@ -40,7 +40,7 @@ class LoginGUI(Toplevel):
 
         self.bind('<Return>', lambda event: self.log_in())
 
-    def register_window(self):
+    def register_window(self):  # create TopLevel window with register functionality
         self.destroy()
         register_page.RegisterGui(master=self.master)
 
@@ -57,8 +57,7 @@ class LoginGUI(Toplevel):
                 result = database_connection.log_in(self.login_entry.get(), self.password_entry.get())
                 if not result:
                     showerror('Error', 'Invalid Login or Password')
-                else:
-                    app.App.user_logged(result[0], result[1], result[2])
+                else:   # successful log in
                     self.close_window()
             except ConnectionError:
                 showerror('Error', 'No data base Connection')

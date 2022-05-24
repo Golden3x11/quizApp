@@ -10,9 +10,9 @@ class Question:
     def __init__(self, text_of_question, correct_answer, choices):
         self.__text_of_question = text_of_question
         self.__correct_answer = correct_answer
-        self.__choices = choices
+        self.__choices = choices  # all possible answers
 
-    def get_text_and_choices(self):
+    def get_text_and_choices(self):  # function that returns question and possible answers
         return self.__text_of_question, self.__choices
 
     @property
@@ -27,18 +27,30 @@ class Question:
     def text_of_question(self):
         return self.__text_of_question
 
-    def isAnswerCorrect(self, answer):
-        return answer == self.__correct_answer
+    def is_answer_correct(self, answer_index):  # checking if answer under this index is correct
+        return self.__correct_answer == self.choices[answer_index]
 
 
-class Quiz:
-    def __init__(self, difficulty=None, chunk_of_questions=10):
-        self.__user = app.App.get_USER()
-        self.__current_question: Question = Question('', '', [])
-        self.__score = 0
+class Game:  # class where some general game info are stored
+    def __init__(self, user):
+        self._user = user
+        self._score = 0
+
+    @property
+    def score(self):
+        return self._score
+
+    def increment_score(self):
+        self._score += 1
+
+
+class Quiz(Game):
+    def __init__(self, user, difficulty=None, chunk_of_questions=10):
+        super(Quiz, self).__init__(user)
+        self.__current_question: Question = None
         self.__difficulty = difficulty
-        self.__parameters = {
-            'amount': chunk_of_questions,
+        self.__parameters = {  # dict of parameters for json api get
+            'amount': chunk_of_questions,  # chunk of question is how many questions we get from api
             'type': 'multiple'
         }
         if difficulty is not None:
@@ -48,13 +60,13 @@ class Quiz:
 
     def __load_questions(self):
         try:
-            response = requests.get(url="https://opentdb.com/api.php", params=self.__parameters)
+            response = requests.get(url="https://opentdb.com/api.php", params=self.__parameters)  # json api get
         except requests.exceptions.RequestException as e:
             raise ConnectionError(e)
-        questions = response.json()["results"]
+        questions = response.json()["results"]  # getting questions from api
 
         for question in questions:
-            choices = []
+            choices = []  # all possible answers
             text_of_question = html.unescape(question['question'])
             correct_answer = html.unescape(question['correct_answer'])
             choices.append(correct_answer)
@@ -63,12 +75,8 @@ class Quiz:
             for answer in other_answers:
                 choices.append(html.unescape(answer))
 
-            random.shuffle(choices)
+            random.shuffle(choices)  # sort of answers
             self.__questions.append(Question(text_of_question, correct_answer, choices))
-
-    @property
-    def score(self):
-        return self.__score
 
     @property
     def current_question(self):
@@ -76,19 +84,21 @@ class Quiz:
 
     def get_new_question(self) -> Question:
         self.__current_question = self.__questions.pop()
+        print('Correct answer: ', self.current_question.correct_answer)  # this quiz is really hard to be honest
+
         if not self.__questions:
             self.__load_questions()
         return self.__current_question
 
     def check_answer(self, id_answer):
-        if self.__current_question.isAnswerCorrect(self.__current_question.choices[int(id_answer)]):
-            self.__score += 1
+        if self.__current_question.is_answer_correct(int(id_answer)):
+            self.increment_score()
             return True
         else:
             self.__questions.clear()
-            if self.__user.best_score < self.score:
-                self.__user.best_score = self.score
-                database_connection.update_best_result(self.__user, self.score)
+            if self._user.best_score < self.score:
+                self._user.best_score = self.score
+                database_connection.update_best_result(self._user, self.score)
 
-            database_connection.add_result_to_db(self.__user, self.score)
+            database_connection.add_result_to_db(self._user, self.score)
             return False

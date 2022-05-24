@@ -7,7 +7,7 @@ import quiz_page
 import rankingpage
 
 
-class MainGui(CTkFrame):
+class MainGui(CTkFrame):  # main frame
     def __init__(self, master):
         super().__init__(master, fg_color='#EEFBFA')
         self.master = master
@@ -26,7 +26,7 @@ class MainGui(CTkFrame):
                                       hover_color='#FFBF69')
         self.start_button.grid(column=1, row=1, sticky='n', pady=20, padx=20)
 
-        self.log_b_var = StringVar(self, 'Login')
+        self.log_b_var = StringVar(self, 'Login')  # when user is logged we want to change that name to logout
         self.log_button = CTkButton(self, textvariable=self.log_b_var, command=self.login_window,
                                     text_font=(app.App.FONT, -30, 'bold'), fg_color='#2EC4B6')
         self.log_button.grid(column=0, row=2, sticky='n', pady=20, padx=20)
@@ -40,7 +40,7 @@ class MainGui(CTkFrame):
         showinfo('Logout', 'You have been successfully logout')
         self.update_login_button()
 
-    def update_login_button(self):
+    def update_login_button(self):  # called when we log in or out
         if app.App.is_user_logged():
             self.log_b_var.set('Logout')
             self.log_button.config(command=self.logout)
@@ -48,16 +48,17 @@ class MainGui(CTkFrame):
             self.log_b_var.set('Login')
             self.log_button.config(command=self.login_window)
 
-    def login_window(self):
-        login_page.LoginGUI(self, self.update_login_button)
+    def login_window(self):  # create TopLevel window with loging functionality
+        login_page.LoginGUI(self,
+                            self.update_login_button)  # we pass function to update button when loging is successful
 
-    def ranking_window(self):
+    def ranking_window(self):  # create TopLevel window with ranking
         rankingpage.RankingGUI(self.master)
 
-    def quiz_window(self):
+    def quiz_window(self):  # create and change main frame to quiz frame
         quiz_page.QuizPage(self.master)
 
-    def start(self):
+    def start(self):  # we need to check if user is logged to play quiz
         if app.App.is_user_logged():
             self.quiz_window()
         else:

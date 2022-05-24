@@ -28,14 +28,13 @@ class RankingGUI(Toplevel):
         except ConnectionError:
             showerror('Error', 'No data base Connection')
 
-
     def display_ranking(self):
         columns = ('Place', 'Player', 'Score', 'Date')
-        width = 100, 300, 100, 300
+        width = 100, 300, 100, 300  # width of columns
         style = Style()
         style.theme_use('clam')
-        style.configure('Treeview.Heading', font=(app.App.FONT, 20))
-        style.configure('Treeview', font=(app.App.FONT, 12), )
+        style.configure('Treeview.Heading', font=(app.App.FONT, 20))  # columns font
+        style.configure('Treeview', font=(app.App.FONT, 12), )  # rows font
         tree = Treeview(self.frame, columns=columns, show='headings')
         tree.grid(row=1, column=0, columnspan=2, padx=20, pady=5, sticky='nswe')
 
@@ -44,4 +43,4 @@ class RankingGUI(Toplevel):
             tree.heading(col, text=col)
 
         for row in self.ranking:
-            tree.insert('', 'end', values=row)
+            tree.insert('', 'end', values=row)  # add values to tree(table)

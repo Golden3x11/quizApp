@@ -4,32 +4,35 @@ from customtkinter import *
 
 class App(CTk):
     __USER = None
-    FONT = 'Roboto Medium'
-    WIDTH = 900
+    FONT = 'Roboto Medium'  # default font used in app
+    WIDTH = 900  # default width of window
     HEIGHT = 650
-    POSITION_W = 0
+    POSITION_W = 0  # position width on screen
     POSITION_H = 0
 
     def __init__(self):
         super().__init__()
-        set_appearance_mode('light')
-        set_default_color_theme('dark-blue')
+        set_appearance_mode('light')  # command from customtkinter
 
         self.title('Quiz App')
-        App.POSITION_W = int(self.winfo_screenwidth() / 2 - App.WIDTH / 2)
-        App.POSITION_H = int(self.winfo_screenheight() / 2 - App.HEIGHT / 2)
+
+        App.POSITION_W = int(
+            self.winfo_screenwidth() / 2 - App.WIDTH / 2)  # position calculated to app be in the center of screen
+        App.POSITION_H = int(
+            self.winfo_screenheight() / 2 - App.HEIGHT / 2)
+
         self.geometry("{}x{}+{}+{}".format(App.WIDTH, App.HEIGHT, App.POSITION_W, App.POSITION_H))
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.frame = main_page.MainGui(self)
+        self.frame = main_page.MainGui(self)    # main frame
 
     @staticmethod
     def get_USER():
         return App.__USER
 
     @staticmethod
-    def user_logged(id_u, login, score):
+    def user_logged(id_u, login, score):    # if user are logged we need to store info about him
         App.__USER = User(id_u, login, score)
 
     @staticmethod
@@ -44,7 +47,7 @@ class App(CTk):
             return True
 
 
-class User:
+class User:     # class to store user info
     def __init__(self, id_u, login, score):
         self.__id = id_u
         self.__login = login

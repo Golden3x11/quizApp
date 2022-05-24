@@ -1,28 +1,31 @@
 import mysql.connector
 from mysql.connector import Error
 
+import app
+
 
 def log_in(login, password):
-    success = []
+    success = False
     connection = None
     try:
         connection = mysql.connector.connect(host='localhost', user='golden3x11', password='pass',
-                                             database='quizapp')
+                                             database='quizapp')  # data base connection
         if connection.is_connected():
             cursor = connection.cursor()
-            query = 'select idU, userlogin, pswd, bestScore from users where userlogin=%s and pswd=MD5(%s)'
-            cursor.execute(query, (login, password))
+            query = 'select idU, userlogin, bestScore from users where userlogin=%s and pswd=MD5(%s)'
+            cursor.execute(query, (login, password))  # query execute
             data = cursor.fetchall()
             if not data:
-                success = []
+                success = False
             else:
+                success = True
                 for row in data:
-                    success = [row[0], row[1], row[3]]
+                    app.App.user_logged(row[0], row[1], row[2])  # create logged user
 
     except Error as e:
         raise ConnectionError('Error while connecting to MySQL', e)
 
-    finally:
+    finally:  # we have to close database connection
         if connection is None:
             pass
         elif connection.is_connected():
