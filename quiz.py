@@ -40,8 +40,8 @@ class Game:  # class where some general game info are stored
     def score(self):
         return self._score
 
-    def increment_score(self):
-        self._score += 1
+    def change_score(self):
+        self._score += 2
 
 
 class Quiz(Game):
@@ -90,9 +90,12 @@ class Quiz(Game):
             self.__load_questions()
         return self.__current_question
 
+    def change_score(self):
+        self._score += 1
+
     def check_answer(self, id_answer):
         if self.__current_question.is_answer_correct(int(id_answer)):
-            self.increment_score()
+            self.change_score()
             return True
         else:
             self.__questions.clear()
