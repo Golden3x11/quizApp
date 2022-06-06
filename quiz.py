@@ -56,13 +56,30 @@ class Quiz(Game):
         if difficulty is not None:
             self.__parameters['difficulty'] = difficulty
         self.__questions = []
+        self.__token = None
         self.__load_questions()
 
     def __load_questions(self):
         try:
+            if self.__token is None:
+                response = requests.get(url="https://opentdb.com/api_token.php?command=request")
+                if response.status_code != 200:
+                    response.raise_for_status()
+                token = response.json()["token"]
+                self.__parameters['token'] = token
+
             response = requests.get(url="https://opentdb.com/api.php", params=self.__parameters)  # json api get
+            if response.status_code != 200:
+                response.raise_for_status()
+            response_code = response.json()["response_code"]
+            if response_code in ['1', '2', '3']:
+                raise ConnectionError
+            elif response_code == '4':
+                self.__token = None
+                self.__load_questions()
         except requests.exceptions.RequestException as e:
             raise ConnectionError(e)
+
         questions = response.json()["results"]  # getting questions from api
 
         for question in questions:

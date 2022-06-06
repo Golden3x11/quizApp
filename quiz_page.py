@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter.messagebox import *
 from customtkinter import *
+from requests.exceptions import HTTPError
 
 import app
 import quiz
@@ -59,8 +60,10 @@ class QuizPage(CTkFrame):
             self.display_user_info()
 
             self.tkraise()  # raise this frame above the main welcoming frame
-        except ConnectionError:
-            showerror('Error', 'Question not loaded probably no internet connection')
+        except HTTPError as e:
+            showerror('Error', e)
+        except ConnectionError as e:
+            showerror('Error', e)
 
     def clear_is_correct_label(self):
         self.is_correct_label.config(text='', fg_color=None)
@@ -91,8 +94,10 @@ class QuizPage(CTkFrame):
                 self.after(1000, self.clear_is_correct_label)
                 try:
                     self.display_question(self.quiz.get_new_question())
-                except ConnectionError:
-                    showerror('Error', 'Question not loaded probably no internet connection')
+                except HTTPError as e:
+                    showerror('Error', e)
+                except ConnectionError as e:
+                    showerror('Error', e)
             else:
                 self.is_correct_label.config(
                     text=f'Incorrect answer!\n Right one: {self.quiz.current_question.correct_answer}',
