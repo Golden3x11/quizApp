@@ -1,9 +1,11 @@
+from db_services import DBServices
 import main_page
 from customtkinter import *
 
 
 class App(CTk):
     __USER = None
+    __DB = None
     FONT = 'Roboto Medium'  # default font used in app
     WIDTH = 900  # default width of window
     HEIGHT = 650
@@ -13,7 +15,6 @@ class App(CTk):
     def __init__(self):
         super().__init__()
         set_appearance_mode('light')  # command from customtkinter
-
         self.title('Quiz App')
 
         App.POSITION_W = int(
@@ -25,14 +26,20 @@ class App(CTk):
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
-        self.frame = main_page.MainGui(self)    # main frame
+        self.frame = main_page.MainGui(self)  # main frame
+
+    @staticmethod
+    def get_db() -> DBServices:
+        if App.__DB is None:
+            App.__DB = DBServices()
+        return App.__DB
 
     @staticmethod
     def get_USER():
         return App.__USER
 
     @staticmethod
-    def user_logged(id_u, login, score):    # if user are logged we need to store info about him
+    def user_logged(id_u, login, score):  # if user are logged we need to store info about him
         App.__USER = User(id_u, login, score)
 
     @staticmethod
@@ -47,7 +54,7 @@ class App(CTk):
             return True
 
 
-class User:     # class to store user info
+class User:  # class to store user info
     def __init__(self, id_u, login, score):
         self.__id = id_u
         self.__login = login

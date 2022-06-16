@@ -3,7 +3,6 @@ import random
 import requests
 
 import app
-import database_connection
 
 
 class Question:
@@ -118,7 +117,7 @@ class Quiz(Game):
             self.__questions.clear()
             if self._user.best_score < self.score:
                 self._user.best_score = self.score
-                database_connection.update_best_result(self._user, self.score)
+                app.App.get_db().update_best_result(self._user, self.score)
 
-            database_connection.add_result_to_db(self._user, self.score)
+            app.App.get_db().add_result_to_db(self._user, self.score)
             return False

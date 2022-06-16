@@ -1,7 +1,6 @@
 from tkinter import *
 from customtkinter import *
 from tkinter.messagebox import *
-import database_connection
 import register_page
 import app
 
@@ -54,10 +53,11 @@ class LoginGUI(Toplevel):
             self.destroy()
         else:
             try:
-                result = database_connection.log_in(self.login_entry.get(), self.password_entry.get())
+                result = app.App.get_db().login(self.login_entry.get(), self.password_entry.get())
                 if not result:
                     showerror('Error', 'Invalid Login or Password')
                 else:   # successful log in
+                    app.App.user_logged(result[0], result[1], result[2])
                     self.close_window()
             except ConnectionError:
                 showerror('Error', 'No data base Connection')

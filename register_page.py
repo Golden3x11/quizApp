@@ -51,7 +51,7 @@ class RegisterGui(Toplevel):
 
         else:
             try:
-                if database_connection.register(self.login_entry.get(), self.password_entry.get()):
+                if app.App.get_db().register(self.login_entry.get(), self.password_entry.get()):
                     showinfo('Success', "Registration Successful")
                     self.destroy()
                 else:
