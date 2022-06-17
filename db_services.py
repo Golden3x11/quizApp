@@ -3,7 +3,7 @@ from db import engine, User, Rank
 from hashlib import md5
 
 
-class DAO:
+class DAO:  # data access object
     Session = sessionmaker(bind=engine)
 
     def create_session(self):
@@ -17,29 +17,16 @@ class DAO:
         session.add(value)
         session.commit()
 
-    # get record from given table by given key
-    def get(self, type, key, session=None):
+    # get record from given table by given condition
+    def get(self, obj, condition, session=None):
         # check if session is given
         flag = session is None
         if session is None:
             session = self.create_session()
 
-        result = session.query(type).filter(key).first()
+        result = session.query(obj).filter(condition).first()
 
-        # if session created in def then commit
-        if not flag:
-            session.commit()
-
-        return result
-
-    def get_order_n(self, type, key, session=None):
-        flag = session is None
-        if session is None:
-            session = self.create_session()
-
-        result = session.query(type).filter(key).first()
-
-        # if session created in def then commit
+        # if session created upper not commit
         if not flag:
             session.commit()
 
@@ -47,8 +34,6 @@ class DAO:
 
 
 class DBServices:
-    __dao: DAO
-
     def __init__(self):
         self.__dao = DAO()
 
@@ -81,12 +66,8 @@ class DBServices:
 
     def get_ranking(self):
         session = self.__dao.create_session()
-        result = session.query(User, Rank)\
-            .filter(User.id == Rank.id_U)\
+        result = session.query(User, Rank) \
+            .filter(User.id == Rank.id_U) \
             .order_by(-Rank.score).limit(10).all()
         data = [(u.id, u.login, r.score, r.date) for u, r in result]
         return data
-
-
-x = DBServices()
-print(x.get_ranking())

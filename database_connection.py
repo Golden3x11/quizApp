@@ -2,7 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 
 
-# not orm database connection
+# not orm database connection not used
 
 class Database:
     def __init__(self):

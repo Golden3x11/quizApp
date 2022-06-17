@@ -3,10 +3,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 import datetime
 
-
 Base = declarative_base()
 
 
+# classes to store rows fro database
 class User(Base):
     __tablename__ = 'users'
     id = Column('idU', Integer, primary_key=True, autoincrement=True)
@@ -17,10 +17,8 @@ class User(Base):
     rank = relationship('Rank', backref='user')
 
     def __init__(self, login, password):
-        # self.id = id
         self.login = login
         self.password = password
-        # self.best_score = best_score
 
 
 class Rank(Base):
@@ -35,5 +33,7 @@ class Rank(Base):
         self.score = score
 
 
+# creating mysql engine, and connect to DB
+# connection to local DB
 engine = create_engine('mysql+pymysql://golden3x11:pass@127.0.0.1:3306/quizapp', pool_size=100)
 Base.metadata.create_all(bind=engine)

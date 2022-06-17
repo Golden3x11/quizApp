@@ -61,9 +61,9 @@ class Quiz(Game):
     def __load_questions(self):
         try:
             if self.__token is None:
-                response = requests.get(url="https://opentdb.com/api_token.php?command=request")
+                response = requests.get(url="https://opentdb.com/api_token.php?command=request")  # request for token
                 if response.status_code != 200:
-                    response.raise_for_status()
+                    response.raise_for_status()  # if response was different from 200
                 token = response.json()["token"]
                 self.__parameters['token'] = token
 
